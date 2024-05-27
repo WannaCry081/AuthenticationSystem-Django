@@ -9,7 +9,12 @@ class UserAdmin(BaseUserAdmin):
     list_display = ("id", "username", "email")
     
 
-    def get_fieldsets(self):
+    def get_fieldsets(self, request, obj = None):
         
-        fieldsets = super().get_fieldsets()
+        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets = (
+            (None, {"fields": ("email", "username", "password")}),
+            ("Personal info", {"fields": ("first_name", "last_name")})
+        ) + fieldsets[2:]
+
         return fieldsets
