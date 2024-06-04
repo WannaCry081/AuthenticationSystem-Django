@@ -14,7 +14,8 @@ class UserAdmin(BaseUserAdmin):
         fieldsets = super().get_fieldsets(request, obj)
         fieldsets = (
             (None, {"fields": ("email", "username", "password")}),
-            ("Personal info", {"fields": ("first_name", "last_name")})
+            ("Personal info", {
+                "fields": ("first_name", "last_name", "reset_code")})
         ) + fieldsets[2:]
 
         return fieldsets
