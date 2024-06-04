@@ -11,9 +11,11 @@ class RegisterSerializer(serializers.ModelSerializer):
                         required = True,
                         source = "last_name")    
     password = serializers.CharField(
-                        required = True)
+                        required = True,
+                        write_only = True)
     rePassword = serializers.CharField(
-                        required = True)
+                        required = True,
+                        write_only = True)
     
     class Meta:
         
