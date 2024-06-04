@@ -17,6 +17,10 @@ Including another URLconf
 import os
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 from dotenv import load_dotenv
 
 
@@ -25,6 +29,18 @@ load_dotenv()
 
 ENVIRONMENT : str = str(os.environ.get("DJANGO_ENV", "")).lower()
 
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Authentication System [Django]",
+        default_version='v1.0',
+        description='A simple Authentication System Restful-API using Django and rest-framework.',
+    ),
+    public = True,
+    authentication_classes = (JWTAuthentication,),
+    permission_classes=(AllowAny,),
+)
+
 urlpatterns = [
     path("api/", include([
         path("v1/", include("api.v1.urls"))
@@ -32,5 +48,9 @@ urlpatterns = [
 ]
 
 if ENVIRONMENT == "development":
-    urlpatterns.append(path('admin/', admin.site.urls))
-     
+    urlpatterns += [
+        path('admin/', admin.site.urls),
+        path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+        path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    ]
