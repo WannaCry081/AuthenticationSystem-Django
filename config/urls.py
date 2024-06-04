@@ -16,7 +16,7 @@ Including another URLconf
 """
 import os
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from dotenv import load_dotenv
 
 
@@ -26,7 +26,9 @@ load_dotenv()
 ENVIRONMENT : str = str(os.environ.get("DJANGO_ENV", "")).lower()
 
 urlpatterns = [
-    
+    path("api/", include([
+        path("v1/", include("api.v1.urls"))
+    ]))
 ]
 
 if ENVIRONMENT == "development":
