@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.exceptions import (ParseError,
                                        AuthenticationFailed,
                                        NotFound)
@@ -15,6 +16,7 @@ class RecoverViewSet(viewsets.GenericViewSet,
 
 
     serializer_class = ForgotPasswordSerializer
+    throttle_classes = [AnonRateThrottle]
 
     
     def get_serializer_class(self):
