@@ -14,6 +14,13 @@ class RecoverViewSet(viewsets.GenericViewSet,
 
     serializer_class = ForgotPasswordSerializer
 
+    
+    def get_serializer_class(self):
+        if self.action == "verify":
+            return ResetPasswordSerializer
+        
+        return super().get_serializer_class()
+
 
     def create(self, request, *args, **kwargs): 
         try:
