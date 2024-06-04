@@ -7,13 +7,19 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.exceptions import (ParseError,
                                        AuthenticationFailed,
                                        NotFound)
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from api.v1.serializers import (ResetPasswordSerializer,
                                 ForgotPasswordSerializer)
 
 
 class RecoverViewSet(viewsets.GenericViewSet,
                      mixins.CreateModelMixin):
-
+    """
+    A viewset for handling password recovery and reset. This viewset provides
+    endpoints for initiating password recovery by sending a reset code and for
+    verifying the reset code to update the password.
+    """
 
     serializer_class = ForgotPasswordSerializer
     throttle_classes = [AnonRateThrottle]
@@ -25,8 +31,28 @@ class RecoverViewSet(viewsets.GenericViewSet,
         
         return super().get_serializer_class()
 
+    @swagger_auto_schema(
+        operation_summary = "Initiates password recovery.",
+        operation_description = "This endpoint sends a password reset code to the user's email.",
+        responses = {
+            status.HTTP_200_OK: openapi.Response("Successfully sent code."),
+            status.HTTP_400_BAD_REQUEST: openapi.Response("Bad Request"),
+            status.HTTP_403_FORBIDDEN: openapi.Response("Forbidden"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal Server Error")
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        """
+        This endpoint sends a password reset code to the user's email.
 
-    def create(self, request, *args, **kwargs): 
+        Args:
+            request: The HTTP request containing the user's email.
+            *args: Additional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            Response: A Response object indicating the result of the email sending process.
+        """
         try:
             serializer = self.get_serializer(data = request.data)
             serializer.is_valid(raise_exception = True)
@@ -57,11 +83,33 @@ class RecoverViewSet(viewsets.GenericViewSet,
         except:
             return Response({
                 "detail" : "Internal Server Error"
-            }, status = status.HTTP_500_INTERNAL_SERVER_ERROR )
+            }, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="Verifies the password reset code.",
+        operation_description="This endpoint verifies the password reset code and updates the user's password.",
+        responses={
+            status.HTTP_200_OK: openapi.Response("Password successfully updated."),
+            status.HTTP_400_BAD_REQUEST: openapi.Response("Bad Request"),
+            status.HTTP_403_FORBIDDEN: openapi.Response("Forbidden"),
+            status.HTTP_404_NOT_FOUND: openapi.Response("Not Found"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response("Internal Server Error")
+        }
+    )
     @action(methods = ["POST"], detail = False)
     def verify(self, request, pk = None):
+        """
+        This endpoint verifies the password reset code and updates the user's password.
+
+        Args:
+            request: The HTTP request containing the reset code and new password.
+            pk: Primary key, not used in this action.
+
+        Returns:
+            Response: A Response object indicating the result of the password reset process.
+        """
         try:
             serializer = self.get_serializer(data = request.data)
             serializer.is_valid(raise_exception = True)
