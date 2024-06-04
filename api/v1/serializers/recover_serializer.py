@@ -21,7 +21,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         user = User.objects.get(email = attrs.get("email"))
         code : str = CodeGenerator()
         if not user:
-            raise AuthenticationFailed(
+            raise NotFound(
                 detail = "Invalid credentials. Please try again.")
         
         user.reset_code = code
