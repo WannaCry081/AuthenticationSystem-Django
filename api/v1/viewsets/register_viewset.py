@@ -25,7 +25,7 @@ class RegisterViewSet(viewsets.GenericViewSet,
             return Response({
                 "access" : str(token.access_token),
                 "refresh" : str(token)
-            }, status = status.HTTP_200_OK)
+            }, status = status.HTTP_201_CREATED)
 
         except ParseError as e:
             return Response({
