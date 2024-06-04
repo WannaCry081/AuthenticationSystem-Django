@@ -2,6 +2,7 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 from rest_framework.exceptions import (ParseError,
                                        AuthenticationFailed)
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 from api.v1.serializers import RegisterSerializer
 
@@ -11,6 +12,7 @@ class RegisterViewSet(viewsets.GenericViewSet,
 
 
     serializer_class = RegisterSerializer
+    throttle_classes = [AnonRateThrottle]
 
 
     def create(self, request, *args, **kwargs):
