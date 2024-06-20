@@ -1,8 +1,6 @@
 from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
-from rest_framework.exceptions import (ParseError,
-                                       NotFound,
-                                       AuthenticationFailed)
+from rest_framework.exceptions import AuthenticationFailed
 from api.v1.models import User
 
 
@@ -15,16 +13,8 @@ class LoginSerializer(serializers.Serializer):
 
     
     def validate(self, attrs):
-        
-        if not ("email" in attrs and "password" in attrs):
-            raise ParseError(
-                detail = "Invalid request. Please try again.")
-            
+
         user = User.objects.get(email = attrs.get("email"))
-        if not user:
-            raise NotFound(
-                detail = "Credential does not exists.")
-        
         if not check_password(attrs.get("password"), 
                               user.password):
             raise AuthenticationFailed(
