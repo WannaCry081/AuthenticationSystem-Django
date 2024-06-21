@@ -31,3 +31,7 @@ class UserViewSet(viewsets.GenericViewSet,
     
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
+
+
+    def delete(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
