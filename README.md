@@ -21,6 +21,10 @@ This project implements an authentication system Restful-API using Django and Dj
 - `/api/v1/login/`: POST endpoint for user login to obtain JWT tokens.
 - `/api/v1/reset-password/`: POST endpoint for password reset request.
 - `/api/v1/reset-password/verify/`: POST endpoint for verifying password reset code and updating the password.
+- `/api/v1/users/{id}/`: GET endpoint to retrieve authenticated user information by ID.
+- `/api/v1/users/{id}/`: PUT endpoint to update authenticated user information by ID.
+- `/api/v1/users/{id}/`: DELETE endpoint to delete authenticated user by ID.
+- `/api/v1/users/me/`: GET endpoint to retrieve authenticated user's own information.
 
 ## Installation
 
