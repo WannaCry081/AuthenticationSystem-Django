@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.throttling import UserRateThrottle
 from api.v1.models import User
 from api.v1.serializers import UserSerializer
 
@@ -17,6 +18,7 @@ class UserViewSet(viewsets.GenericViewSet,
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
     
     
     def check_object_permissions(self, request, obj):
