@@ -87,7 +87,7 @@ class UserViewSet(viewsets.GenericViewSet,
             status.HTTP_500_INTERNAL_SERVER_ERROR : openapi.Response("Internal Server Error"),
         }
     )
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         """
         Remove the authenticated user data.
 
