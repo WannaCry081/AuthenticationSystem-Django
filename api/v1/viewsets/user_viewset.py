@@ -53,7 +53,27 @@ class UserViewSet(viewsets.GenericViewSet,
         return super().retrieve(request, *args, **kwargs)
     
     
+    @swagger_auto_schema(
+        operation_summary = "Updates the user profile.",
+        operation_description = "This endpoint updates the authenticated user profile.",
+        responses = {
+            status.HTTP_200_OK : openapi.Response("Ok"),
+            status.HTTP_400_BAD_REQUEST : openapi.Response("Bad Request"),
+            status.HTTP_403_FORBIDDEN : openapi.Response("Authentication Failed"),
+            status.HTTP_404_NOT_FOUND : openapi.Response("Not Found"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR : openapi.Response("Internal Server Error"),
+        }
+    )
     def update(self, request, *args, **kwargs):
+        """
+        Update the authenticated user profile.
+
+        Args:
+            request (Request): The request object containing user information.
+
+        Returns:
+            Response: The response object containing the update status or error message.
+        """
         return super().update(request, *args, **kwargs)
 
 
