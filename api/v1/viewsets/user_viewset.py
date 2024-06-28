@@ -5,6 +5,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.throttling import UserRateThrottle
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from api.v1.models import User
 from api.v1.serializers import UserSerializer
 
@@ -28,8 +30,26 @@ class UserViewSet(viewsets.GenericViewSet,
 
         return super().check_object_permissions(request, obj)
     
-    
+    @swagger_auto_schema(
+        operation_summary = "Retrieve authenticated user profile.",
+        operation_description = "This endpoint return the user profile of a authenticated user base on the path parameter.",
+        responses = {
+            status.HTTP_200_OK : openapi.Response("Ok"),
+            status.HTTP_403_FORBIDDEN : openapi.Response("Authentication Failed"),
+            status.HTTP_404_NOT_FOUND : openapi.Response("Not Found"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR : openapi.Response("Internal Server Error"),
+        }
+    )
     def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve the authenticated user profile.
+
+        Args:
+            request (Request): The request object containing user information.
+
+        Returns:
+            Response: The response object containing the user profile data or error message.
+        """
         return super().retrieve(request, *args, **kwargs)
     
     
