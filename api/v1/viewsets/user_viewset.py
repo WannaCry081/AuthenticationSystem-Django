@@ -77,7 +77,26 @@ class UserViewSet(viewsets.GenericViewSet,
         return super().update(request, *args, **kwargs)
 
 
+    @swagger_auto_schema(
+        operation_summary = "Removes an authenticated user.",
+        operation_description = "This endpoint remove the authenticated user data.",
+        responses = {
+            status.HTTP_200_OK : openapi.Response("Ok"),
+            status.HTTP_403_FORBIDDEN : openapi.Response("Authentication Failed"),
+            status.HTTP_404_NOT_FOUND : openapi.Response("Not Found"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR : openapi.Response("Internal Server Error"),
+        }
+    )
     def delete(self, request, *args, **kwargs):
+        """
+        Remove the authenticated user data.
+
+        Args:
+            request (Request): The request object containing user information.
+
+        Returns:
+            Response: The response object containing the deletion status or error message.
+        """
         return super().destroy(request, *args, **kwargs)
 
 
