@@ -100,8 +100,29 @@ class UserViewSet(viewsets.GenericViewSet,
         return super().destroy(request, *args, **kwargs)
 
 
+    @swagger_auto_schema(
+        operation_summary = "Retrieves the authenticated user profile.",
+        operation_description = "This endpoint returns the user profile information without providing the ID.",
+        responses = {
+            status.HTTP_200_OK : openapi.Response("Ok"),
+            status.HTTP_403_FORBIDDEN : openapi.Response("Authentication Failed"),
+            status.HTTP_404_NOT_FOUND : openapi.Response("Not Found"),
+            status.HTTP_500_INTERNAL_SERVER_ERROR : openapi.Response("Internal Server Error"),
+        }
+    )
     @action(methods = ["GET"], detail = False) 
     def me(self, request, id = None):
+        """
+        Retrieve the authenticated user profile.
+
+        Args:
+            request (Request): The request object containing user information.
+            id (int, optional): The ID of the user, defaults to None.
+
+        Returns:
+            Response: The response object containing the user profile data or error message.
+
+        """
         try:
             data = UserSerializer(request.user).data
             return Response(data, status = status.HTTP_200_OK)
